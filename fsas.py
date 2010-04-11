@@ -20,19 +20,15 @@ class NFA(object):
 
     def _step_over_states(self, str_input):
         state_set = list()
-        for state, symbol in self.STATE['transitions']:
-            if symbol in str_input:
-                state_set.append(self.states[state])
+        for state in self.STATE:
+            for trans_state, symbol in state['transitions']:
+                if symbol in str_input:
+                    state_set.append(self.states[trans_state])
 
         return state_set
 
-
-class DFA(NFA):
-
     @property
-    def STATE(self):
-        return self.DFA_STATE[0]
-
-    @STATE.setter
-    def STATE(self, value):
-        self.DFA_STATE = value
+    def in_final(self):
+        for state in self.STATE:
+            if state['final']:
+                return True
