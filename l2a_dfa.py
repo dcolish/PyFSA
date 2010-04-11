@@ -1,6 +1,6 @@
 from sys import argv
 
-from .fsas import DFA
+from fsas import DFA
 
 input_str = argv[1]
 

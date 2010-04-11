@@ -1,14 +1,13 @@
-class DFA(object):
+class NFA(object):
     empty_state = dict(inital=False,
                        final=False,
-                       transisions=[])
+                       transitions=[])
 
     def __init__(self, states, alphabet):
         self.states = states
         for key, value in self.states.items():
             if value['initial']:
-                self.STATE = self.states[key]
-
+                self.STATE = [self.states[key]]
 
         self.alphabet = alphabet
 
@@ -20,7 +19,20 @@ class DFA(object):
         return self.STATE
 
     def _step_over_states(self, str_input):
-
+        state_set = list()
         for state, symbol in self.STATE['transitions']:
             if symbol in str_input:
-                return self.states[state]
+                state_set.append(self.states[state])
+
+        return state_set
+
+
+class DFA(NFA):
+
+    @property
+    def STATE(self):
+        return self.DFA_STATE[0]
+
+    @STATE.setter
+    def STATE(self, value):
+        self.DFA_STATE = value
