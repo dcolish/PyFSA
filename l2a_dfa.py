@@ -1,6 +1,6 @@
 from sys import argv
 
-from fsas import NFA
+from fsas import FSA
 
 input_str = argv[1]
 
@@ -13,11 +13,10 @@ states = dict(q0=dict(initial=True,
                       final=False,
                       transitions=[('q0', 'a'), ('q1', 'b')]))
 
-
-dfa = NFA(states, alphabet)
+dfa = FSA(states, alphabet)
 
 for x in input_str:
-    current_state = dfa.read_one(x)
+    dfa.read_one(x)
 
 if dfa.in_final:
     print 'ACCEPTED'

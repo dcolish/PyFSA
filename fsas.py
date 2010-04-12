@@ -1,13 +1,22 @@
-class NFA(object):
+import warnings
+
+
+class FSA(object):
     empty_state = dict(inital=False,
                        final=False,
                        transitions=[])
+    EPSILON = 'epi'
+    STATE = set()
+    states = dict()
 
     def __init__(self, states, alphabet):
-        self.states = states
+        self.states.update(states)
         for key, value in self.states.items():
             if value['initial']:
-                self.STATE = [self.states[key]]
+                self.STATE.add(key)
+
+        if len(self.STATE) is not 1:
+            warnings.warn("Your FSA has more than one initial state")
 
         self.alphabet = alphabet
 
@@ -15,20 +24,22 @@ class NFA(object):
         if str_input not in self.alphabet:
             return self.empty_state
 
-        self.STATE = self._step_over_states(str_input)
+        self._step_over_states(str_input)
         return self.STATE
 
-    def _step_over_states(self, str_input):
-        state_set = list()
+    def _step_over_states(self, symbol):
+        state_set = set()
         for state in self.STATE:
-            for trans_state, symbol in state['transitions']:
-                if symbol in str_input:
-                    state_set.append(self.states[trans_state])
+            for trans_state, state_symbol in self.states[state]['transitions']:
+                if state_symbol is symbol:
+                    state_set.add(trans_state)
+        self.STATE = state_set
 
-        return state_set
+    def _perform_eps_closure(self):
+        self._step_over_states(self.EPSILON)
 
     @property
     def in_final(self):
         for state in self.STATE:
-            if state['final']:
+            if self.states[state]['final']:
                 return True
