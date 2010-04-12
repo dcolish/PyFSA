@@ -28,4 +28,3 @@ if nfa.in_final:
     print 'ACCEPTED'
 else:
     print 'REJECTED'
-

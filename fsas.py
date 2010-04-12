@@ -39,7 +39,19 @@ class FSA(object):
         self._step_over_states(self.EPSILON)
 
     @property
-    def in_final(self):
+    def is_accepted(self):
         for state in self.STATE:
             if self.states[state]['final']:
                 return True
+            else:
+                return False
+
+    @property
+    def current_state(self):
+        return self.STATE
+
+    def print_accept_state(self):
+        if self.is_accepted:
+            print "ACCEPTED"
+        else:
+            print "REJECTED"
